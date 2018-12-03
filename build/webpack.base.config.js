@@ -1,8 +1,9 @@
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     entry: './src/main.js',
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve(__dirname, '../dist'),
         filename: 'js/[name].js'
     },
     module: {
@@ -16,7 +17,8 @@ module.exports = {
                 test: /\.css$/,
                 use: [
                     'style-loader',
-                    'css-loader'
+                    'css-loader',
+                    'less-loader'
                 ]
             },
             {
@@ -37,15 +39,35 @@ module.exports = {
             },
             {
                 test: /\.vue$/,
-                loader: 'vue-loader'
+                loader: 'vue-loader',
+                options: {
+                    loaders: {
+                        less: [
+                            'vue-style-loader',
+                            'css-loader',
+                            'less-loader'
+                        ]
+                    }
+                }
             }
         ]
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            filename: 'index.html',
+            title: 'test pdf',
+            template: path.resolve(__dirname, '../index.html')
+        })
+    ],
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js',
-            '@': path.resolve(__dirname, './src')
+            '@': path.resolve(__dirname, '../src')
         }
-    }
+    },
+    externals: {
+        'jquery': 'window.jQuery'
+    },
+    
 }
