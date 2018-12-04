@@ -1,1 +1,5 @@
-document.write('index page')
+
+
+window.onload = function() {
+    console.log('loaded')
+}

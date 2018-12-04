@@ -15,7 +15,8 @@ if (process.env.NODE_ENV === 'development') {
         ],
         devServer: {
             contentBase: path.resolve(__dirname, '../dist')
-        }
+        },
+        devtool: '#eval-source-map'
     })
 
     module.exports = webpackConfig

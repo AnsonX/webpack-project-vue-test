@@ -1,5 +1,10 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+// const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin')
+const ExtractCssPlugin = require('mini-css-extract-plugin')
+const ExtractRootCss = new ExtractCssPlugin({ filename: 'styles/root.css', allChunks: false })
+const ExtractVueCss = new ExtractCssPlugin({ filename: 'styles/[name]/style.css', allChunks: true })
+
 module.exports = {
     entry: './src/main.js',
     output: {
@@ -16,6 +21,15 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
+                    ExtractCssPlugin.loader,
+                    'style-loader',
+                    'css-loader'
+                ]
+            },
+            {
+                test: /\.less$/,
+                use: [
+                    ExtractCssPlugin.loader,
                     'style-loader',
                     'css-loader',
                     'less-loader'
@@ -42,7 +56,13 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     loaders: {
-                        less: [
+                        'css': [
+                            ExtractCssPlugin.loader,
+                            'vue-style-loader',
+                            'css-loader'
+                        ],
+                        'less': [
+                            ExtractCssPlugin.loader,
                             'vue-style-loader',
                             'css-loader',
                             'less-loader'
@@ -57,7 +77,9 @@ module.exports = {
             filename: 'index.html',
             title: 'test pdf',
             template: path.resolve(__dirname, '../index.html')
-        })
+        }),
+        ExtractRootCss,
+        ExtractVueCss
     ],
     resolve: {
         extensions: ['.js', '.vue', '.json'],
